@@ -1,0 +1,131 @@
+/* Admin Dashboard Styles */
+.admin-dashboard {
+    background-color: #f8f9fc;
+}
+
+.sidebar {
+    background-color: #343a40;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.2rem;
+    border-radius: 0.25rem;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar .nav-link i {
+    margin-right: 0.5rem;
+}
+
+.sidebar .nav-link.collapsed .fa-angle-down {
+    transform: rotate(-90deg);
+}
+
+.sidebar .nav-link .fa-angle-down {
+    transition: transform 0.3s;
+}
+
+.sidebar-header {
+    padding: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-brand {
+    color: #fff;
+    text-align: center;
+}
+
+.notification-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: translate(25%, -25%);
+}
+
+.notification-dropdown {
+    width: 300px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    padding: 0.75rem 1rem;
+    white-space: normal;
+}
+
+.notification-item.unread {
+    background-color: #f8f9fa;
+    border-left: 3px solid #0d6efd;
+}
+
+.activity-feed .activity-item,
+.client-responses .response-item {
+    display: flex;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-feed .activity-icon,
+.client-responses .response-status {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.activity-feed .activity-content,
+.client-responses .response-content {
+    flex-grow: 1;
+}
+
+.card {
+    border: none;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e3e6f0;
+}
+
+.border-start-primary {
+    border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-start-success {
+    border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-start-info {
+    border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-start-warning {
+    border-left: 0.25rem solid #f6c23e !important;
+}
+
+.text-xs {
+    font-size: 0.7rem;
+}
+
+.text-gray-800 {
+    color: #5a5c69 !important;
+}
+
+.text-gray-300 {
+    color: #dddfeb !important;
+}
