@@ -19,7 +19,9 @@ if (!$contract_id) {
 $stmt = $pdo->prepare("SELECT agent_id FROM agents WHERE user_id = ?");
 $stmt->execute([$_SESSION['user']['id']]);
 $agent = $stmt->fetch();
-
+// Get draft notifications
+$draftNotifications = getDraftNotifications($pdo, $_SESSION['user']['id']);
+$draftNotificationCount = count($draftNotifications);
 // Get contract details with all prefilled info
 $stmt = $pdo->prepare("
     SELECT c.*, 

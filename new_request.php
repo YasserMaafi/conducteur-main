@@ -16,7 +16,7 @@ $merchandise_types = [];
 try {
     // Get the logged-in client's information only (SENDER)
     $stmt = $pdo->prepare("
-        SELECT c.client_id, c.company_name, c.phone_number, c.account_code, u.email 
+        SELECT c.client_id, c.company_name, c.phone_number, c.account_code, u.email     
         FROM clients c 
         JOIN users u ON c.user_id = u.user_id 
         WHERE u.user_id = ? AND u.is_active = true
@@ -104,6 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
                 throw new Exception("Le code de compte est requis pour le paiement par compte courant");
             }
         }
+
 
         // Get merchandise details for notification
         $stmt = $pdo->prepare("SELECT description, hazardous FROM merchandise WHERE merchandise_id = ?");

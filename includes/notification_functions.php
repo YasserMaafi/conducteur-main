@@ -28,6 +28,19 @@ function createNotification($user_id, $type, $title, $message, $related_request_
     return $pdo->lastInsertId();
 }
 
+function getDraftNotifications($pdo, $user_id) {
+    $stmt = $pdo->prepare("
+        SELECT n.* 
+        FROM notifications n
+        WHERE n.user_id = ? 
+          AND n.type = 'contract_draft'
+          AND n.is_read = false
+        ORDER BY n.created_at DESC
+        LIMIT 5
+    ");
+    $stmt->execute([$user_id]);
+    return $stmt->fetchAll();
+}
 function getUnreadNotifications($user_id, $limit = 5) {
     global $pdo;
     

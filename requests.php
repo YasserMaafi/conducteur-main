@@ -97,6 +97,15 @@ $requests = $requestsStmt->fetchAll();
 
       <!-- SIDEBAR -->
       <div class="col-lg-3 mb-4">
+                <div class="card shadow-sm mb-4">
+          <div class="card-body text-center">
+            <div class="avatar bg-primary text-white rounded-circle p-3 mx-auto" style="width:80px;height:80px">
+              <i class="fas fa-building fa-2x"></i>
+            </div>
+            <h5 class="mt-3"><?= htmlspecialchars($client['company_name']) ?></h5>
+            <small class="text-muted">Client</small>
+          </div>
+        </div>
         <div class="list-group shadow-sm">
           <a href="client-dashboard.php"         class="list-group-item list-group-item-action">
             <i class="fas fa-tachometer-alt me-2"></i>Tableau de bord

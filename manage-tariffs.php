@@ -529,14 +529,23 @@ $notifications = $notifStmt->fetchAll();
                 <?php require_once 'includes/admin_notifications.php'; ?>
 
                 <!-- User dropdown -->
-                <div class="dropdown me-3">
-                    <a class="nav-link dropdown-toggle position-relative p-2" href="#" id="userDropdown" 
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" 
                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user fa-lg"></i>
+                        <div class="me-2 d-none d-sm-block text-end">
+                            <div class="fw-semibold text-white"><?= htmlspecialchars($admin['full_name'] ?? 'Administrateur') ?></div>
+                            <small class="text-white-50"><?= htmlspecialchars($admin['department'] ?? 'Admin') ?></small>
+                        </div>
+                        <div class="avatar-sm bg-white text-primary rounded-circle d-flex align-items-center justify-content-center">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="admin-profile.php">Profil</a></li>
-                        <li><a class="dropdown-item" href="logout.php">Déconnexion</a></li>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+                        <li><h6 class="dropdown-header">Compte Administrateur</h6></li>
+                        <li><a class="dropdown-item" href="admin-profile.php"><i class="fas fa-user-cog me-2"></i>Profil</a></li>
+                        <li><a class="dropdown-item" href="admin-settings.php"><i class="fas fa-cog me-2"></i>Paramètres</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>Déconnexion</a></li>
                     </ul>
                 </div>
             </div>
@@ -656,12 +665,14 @@ $notifications = $notifStmt->fetchAll();
         <?php endif; ?>
 
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="fas fa-money-bill-wave me-2"></i>Gestion des Tarifs</h2>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addTariffModal">
-                <i class="fas fa-plus me-2"></i>Nouveau Tarif
-            </button>
-        </div>
+<div class="d-flex justify-content-between align-items-center mb-3 px-2">
+    <h2 class="mb-0 fs-5">
+        <i class="fas fa-money-bill-wave text-primary me-2"></i>Gestion des Tarifs
+    </h2>
+    <button class="btn btn-sm btn-primary px-2 py-1" data-bs-toggle="modal" data-bs-target="#addTariffModal">
+        <i class="fas fa-plus me-1"></i>Ajouter
+    </button>
+</div>
 
         <!-- Search and Filter Form -->
         <form method="GET" class="mb-4">

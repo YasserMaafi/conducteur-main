@@ -1,6 +1,7 @@
 <?php
 require_once 'includes/config.php';
 require_once 'includes/auth_functions.php';
+require_once 'includes/notification_functions.php';
 
 // Verify agent role
 if (!isLoggedIn() || $_SESSION['user']['role'] !== 'agent') {
@@ -12,6 +13,10 @@ $stmt = $pdo->prepare("SELECT a.*, u.email FROM agents a JOIN users u ON a.user_
 $stmt->execute([$_SESSION['user']['id']]);
 $agent = $stmt->fetch();
 
+// Get draft notifications
+$draftNotifications = getDraftNotifications($pdo, $_SESSION['user']['id']);
+$draftNotificationCount = count($draftNotifications);
+
 // Handle arrival notification
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notify_arrival'])) {
     $contract_id = filter_input(INPUT_POST, 'contract_id', FILTER_VALIDATE_INT);
@@ -20,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notify_arrival'])) {
         try {
             $pdo->beginTransaction();
             
-            // Update contract status
+            // Update contract status to 'terminé'
             $stmt = $pdo->prepare("
                 UPDATE contracts 
-                SET status = 'arrived', 
+                SET status = 'terminé', 
                     updated_at = CURRENT_TIMESTAMP 
                 WHERE contract_id = ? AND agent_id = ?
             ");
@@ -43,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notify_arrival'])) {
                 // Create notification
                 $stmt = $pdo->prepare("
                     INSERT INTO notifications (user_id, type, title, message, metadata, created_at)
-                    VALUES (?, 'arrival', 'Arrivée de votre expédition', ?, ?, CURRENT_TIMESTAMP)
+                    VALUES (?, 'confirmation_arrivage', 'Arrivée de votre expédition', ?, ?, CURRENT_TIMESTAMP)
                 ");
                 
                 $message = "Votre expédition #CT-{$contract_id} est arrivée à destination.";
@@ -66,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['notify_arrival'])) {
     redirect('agent-expeditions.php');
 }
 
-// Get today's shipments
+// Get today's shipments with status 'en_cours'
 $stmt = $pdo->prepare("
     SELECT c.*, 
            cl.company_name AS client_name,
@@ -81,7 +86,7 @@ $stmt = $pdo->prepare("
     LEFT JOIN trains t ON t.train_id = c.train_id
     WHERE c.agent_id = ? 
     AND c.shipment_date = CURRENT_DATE
-    AND c.status IN ('in_transit', 'en_cours')
+    AND c.status = 'validé'
     ORDER BY c.shipment_date ASC
 ");
 $stmt->execute([$agent['agent_id']]);
@@ -175,17 +180,12 @@ $today_shipments = $stmt->fetchAll();
             border-radius: 50rem;
         }
         
-        .status-badge.in_transit {
-            background-color: rgba(13, 202, 240, 0.1);
-            color: var(--info-color);
-        }
-        
         .status-badge.en_cours {
             background-color: rgba(13, 202, 240, 0.1);
             color: var(--info-color);
         }
         
-        .status-badge.arrived {
+        .status-badge.terminé {
             background-color: rgba(25, 135, 84, 0.1);
             color: var(--success-color);
         }
@@ -202,6 +202,46 @@ $today_shipments = $stmt->fetchAll();
                 <span class="text-white me-3 d-none d-sm-inline">
                     <i class="fas fa-id-badge me-1"></i> <?= htmlspecialchars($agent['badge_number']) ?>
                 </span>
+                <!-- Notification Dropdown -->
+                <div class="dropdown me-3">
+                    <button class="btn btn-outline-light dropdown-toggle position-relative" 
+                            type="button" 
+                            id="notificationDropdown" 
+                            data-bs-toggle="dropdown" 
+                            aria-expanded="false">
+                        <i class="fas fa-bell"></i>
+                        <?php if ($draftNotificationCount > 0): ?>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <?= $draftNotificationCount ?>
+                            </span>
+                        <?php endif; ?>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
+                        <?php if ($draftNotificationCount > 0): ?>
+                            <li><h6 class="dropdown-header">Contrats en brouillon</h6></li>
+                            <?php foreach ($draftNotifications as $notification): 
+                                $metadata = json_decode($notification['metadata'], true);
+                                $contract_id = $metadata['contract_id'] ?? 0;
+                            ?>
+                                <li>
+                                    <a class="dropdown-item" href="complete_contract.php?id=<?= $contract_id ?>">
+                                        <div class="d-flex justify-content-between">
+                                            <span class="fw-bold"><?= htmlspecialchars($notification['title']) ?></span>
+                                            <small class="text-muted ms-2"><?= date('H:i', strtotime($notification['created_at'])) ?></small>
+                                        </div>
+                                        <small class="text-muted"><?= htmlspecialchars($notification['message']) ?></small>
+                                    </a>
+                                </li>
+                            <?php endforeach; ?>
+                            <li><hr class="dropdown-divider"></li>
+                        <?php else: ?>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2 text-muted"></i>Aucun nouveau brouillon</a></li>
+                        <?php endif; ?>
+                        <li><a class="dropdown-item text-center small" href="agent-contracts.php?status=draft">
+                            Voir tous les brouillons
+                        </a></li>
+                    </ul>
+                </div>
                 <div class="dropdown">
                     <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user-circle"></i>
@@ -322,7 +362,7 @@ $today_shipments = $stmt->fetchAll();
                                                     <?= htmlspecialchars($shipment['client_name']) ?>
                                                 </p>
                                             </div>
-                                            <span class="status-badge <?= $shipment['status'] ?>">
+                                            <span class="status-badge <?= str_replace('é', 'e', $shipment['status']) ?>">
                                                 <?= ucfirst(str_replace('_', ' ', $shipment['status'])) ?>
                                             </span>
                                         </div>
@@ -396,4 +436,4 @@ $today_shipments = $stmt->fetchAll();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>

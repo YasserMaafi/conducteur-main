@@ -174,25 +174,34 @@ $notifCount = $notifCountStmt->fetch()['count'];
             <i class="fas fa-bell me-2"></i>Notifications
         </div>
         
-        <?php if (empty($notifications)): ?>
-            <div class="p-3 text-center text-muted">Aucune nouvelle notification</div>
-        <?php else: ?>
-            <?php foreach ($notifications as $n): ?>
-                <?php 
-                    // Get related request ID from notification
-                    $request_id = $n['related_request_id'];
-                    $link = $request_id ? "request_details.php?id=$request_id" : '#';
-                    $cls  = $n['is_read'] ? '' : 'unread';
-                ?>
-                <a href="<?= htmlspecialchars($link) ?>" class="dropdown-item notification-item <?= $cls ?> px-3 py-2 border-bottom" data-id="<?= $n['id'] ?>">
-                    <div class="d-flex justify-content-between">
-                        <strong><?= htmlspecialchars($n['title']) ?></strong>
-                        <small class="text-muted"><?= time_elapsed_string($n['created_at']) ?></small>
-                    </div>
-                    <small><?= htmlspecialchars($n['message']) ?></small>
-                </a>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <!-- In the dropdown-notifications section of client-dashboard.php -->
+<?php if (empty($notifications)): ?>
+    <div class="p-3 text-center text-muted">Aucune nouvelle notification</div>
+<?php else: ?>
+    <?php foreach ($notifications as $n): ?>
+        <?php 
+            // Parse metadata if it exists
+            $metadata = json_decode($n['metadata'] ?? '{}', true);
+            
+            // Determine the link based on notification type
+            $link = '#';
+            if ($n['type'] === 'contract_completed' && isset($metadata['contract_id'])) {
+                $link = "client-contract-details.php?id=" . $metadata['contract_id'];
+            } elseif ($n['related_request_id']) {
+                $link = "request_details.php?id=" . $n['related_request_id'];
+            }
+            
+            $cls = $n['is_read'] ? '' : 'unread';
+        ?>
+        <a href="<?= htmlspecialchars($link) ?>" class="dropdown-item notification-item <?= $cls ?> px-3 py-2 border-bottom" data-id="<?= $n['id'] ?>">
+            <div class="d-flex justify-content-between">
+                <strong><?= htmlspecialchars($n['title']) ?></strong>
+                <small class="text-muted"><?= time_elapsed_string($n['created_at']) ?></small>
+            </div>
+            <small><?= htmlspecialchars($n['message']) ?></small>
+        </a>
+    <?php endforeach; ?>
+<?php endif; ?>
         
         <div class="dropdown-footer">
             <a href="notifications.php" class="btn btn-sm btn-link">Voir toutes les notifications</a>
