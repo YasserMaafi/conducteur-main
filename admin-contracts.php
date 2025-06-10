@@ -96,6 +96,8 @@ function getStatusBadgeClass($status) {
             return 'bg-success';
         case 'annulé':
             return 'bg-danger';
+        case 'problem':
+            return 'bg-warning';
         default:
             return 'bg-info';
     }
@@ -695,6 +697,8 @@ function getStatusBadgeClass($status) {
                         <option value="en_cours" <?= $status === 'en_cours' ? 'selected' : '' ?>>En cours</option>
                         <option value="terminé" <?= $status === 'terminé' ? 'selected' : '' ?>>Terminé</option>
                         <option value="annulé" <?= $status === 'annulé' ? 'selected' : '' ?>>Annulé</option>
+                            <option value="problem" <?= $status === 'problem' ? 'selected' : '' ?>>Problème</option>
+
                     </select>
                 </div>
                 <div class="col-md-2">

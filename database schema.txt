@@ -60,6 +60,8 @@
  contracts         | freight_request_id      | integer                     | YES         | NO             | freight_requests   | id                  | NO
  contracts         | payment_status          | character varying           | YES         | NO             |                    |                     | NO
  contracts         | train_id                | integer                     | YES         | NO             | trains             | train_id            | NO
+ contracts         | reported_problems       | text                        | YES         | NO             |                    |                     | NO
+ contracts         | notes                   | text                        | YES         | NO             |                    |                     | NO
  drivers           | driver_id               | integer                     | NO          | YES            |                    |                     | NO
  drivers           | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
  drivers           | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
@@ -161,4 +163,4 @@
  wagons            | wagon_number            | character varying           | NO          | NO             |                    |                     | YES
  wagons            | status                  | character varying           | YES         | NO             |                    |                     | NO
  wagons            | current_location        | character varying           | YES         | NO             |                    |                     | NO
-(161 rows)
+(163 rows)

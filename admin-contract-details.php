@@ -82,6 +82,8 @@ function getStatusBadgeClass($status) {
             return 'bg-success';
         case 'annulé':
             return 'bg-danger';
+        case 'problem':
+            return 'bg-warning';
         default:
             return 'bg-info';
     }
@@ -353,23 +355,32 @@ function getStatusBadgeClass($status) {
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2><i class="fas fa-file-contract me-2"></i>Détails du Contrat #<?= $contract_id ?></h2>
-            <div>
-                <a href="admin-contracts.php" class="btn btn-outline-primary me-2">
-                    <i class="fas fa-arrow-left me-2"></i>Retour
-                </a>
-                <?php if ($contract['status'] === 'draft'): ?>
-                    <a href="edit-contract.php?id=<?= $contract_id ?>" class="btn btn-primary">
-                        <i class="fas fa-edit me-2"></i>Modifier
-                    </a>
-                <?php endif; ?>
-            </div>
-        </div>
+<!-- In the header section, replace the current buttons with this: -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fas fa-file-contract me-2"></i>Détails du Contrat #<?= $contract_id ?></h2>
+    <div>
+        <a href="admin-contracts.php" class="btn btn-outline-primary me-2">
+            <i class="fas fa-arrow-left me-2"></i>Retour
+        </a>
+        <?php if (in_array($contract['status'], ['draft', 'en_cours', 'problem'])): ?>
+            <a href="edit-contract.php?id=<?= $contract_id ?>" class="btn btn-primary me-2">
+                <i class="fas fa-edit me-2"></i>Modifier
+            </a>
+        <?php endif; ?>
+        <?php if ($contract['status'] === 'draft'): ?>
+            <form action="process-contract.php" method="post" class="d-inline">
+                <input type="hidden" name="contract_id" value="<?= $contract_id ?>">
+                <input type="hidden" name="action" value="send_to_agent">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-paper-plane me-2"></i>Envoyer à l'agent
+                </button>
+            </form>
+        <?php endif; ?>
+    </div>
+</div>
 
         <div class="row">
-            <!-- Contract Details -->
+            <!-- Left Column (Main Content) -->
             <div class="col-lg-8">
                 <!-- Client Information -->
                 <div class="detail-section">
@@ -455,9 +466,20 @@ function getStatusBadgeClass($status) {
                         </div>
                     </div>
                 </div>
+
+                <!-- Problem Report Section -->
+                <?php if (!empty($contract['reported_problems'])): ?>
+                    <div class="detail-section">
+                        <h5><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Problème Signalé</h5>
+                        <div class="alert alert-warning">
+                            <div class="detail-label">Description du problème</div>
+                            <div class="detail-value"><?= htmlspecialchars($contract['reported_problems']) ?></div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
 
-            <!-- Sidebar Information -->
+            <!-- Right Column (Sidebar) -->
             <div class="col-lg-4">
                 <!-- Payment Information -->
                 <div class="detail-section">
@@ -554,4 +576,4 @@ function getStatusBadgeClass($status) {
         });
     </script>
 </body>
-</html> 
+</html>

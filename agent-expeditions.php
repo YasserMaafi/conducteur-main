@@ -85,7 +85,7 @@ $stmt = $pdo->prepare("
     JOIN gares g2 ON c.gare_destinataire = g2.id_gare
     LEFT JOIN trains t ON t.train_id = c.train_id
     WHERE c.agent_id = ? 
-    AND c.shipment_date = CURRENT_DATE
+    AND DATE(c.shipment_date) = CURRENT_DATE
     AND c.status = 'validé'
     ORDER BY c.shipment_date ASC
 ");

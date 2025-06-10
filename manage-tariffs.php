@@ -736,7 +736,7 @@ $notifications = $notifStmt->fetchAll();
                             </div>
                             <div class="text-center">
                                 <span class="badge bg-primary rate-badge">
-                                    <?= number_format($tariff['base_rate_per_km'], 2) ?> €/km
+                                    <?= number_format($tariff['base_rate_per_km'], 2) ?> TND/km
                                 </span>
                             </div>
                             <div class="mt-3">
@@ -767,7 +767,7 @@ $notifications = $notifStmt->fetchAll();
                                                value="<?= htmlspecialchars($tariff['company_name']) ?>" readonly>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Taux de Base (€/km)</label>
+                                        <label class="form-label">Taux de Base (TND/km)</label>
                                         <input type="number" name="base_rate_per_km" class="form-control" 
                                                value="<?= $tariff['base_rate_per_km'] ?>" step="0.01" required>
                                     </div>
@@ -831,7 +831,7 @@ $notifications = $notifStmt->fetchAll();
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Taux de Base (€/km)</label>
+                            <label class="form-label">Taux de Base (TND/km)</label>
                             <input type="number" name="base_rate_per_km" class="form-control" 
                                    step="0.01" min="0" required>
                         </div>
