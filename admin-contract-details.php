@@ -379,6 +379,31 @@ function getStatusBadgeClass($status) {
     </div>
 </div>
 
+<?php if ($contract['status'] === 'problem'): ?>
+    <div class="mt-3 alert alert-warning">
+        <h5><i class="fas fa-exclamation-triangle me-2"></i>Action requise: Problème signalé</h5>
+        <p>L'agent a signalé un problème avec ce contrat. Veuillez prendre une décision:</p>
+        
+        <form action="process-contract-problem.php" method="post" class="mt-3">
+            <input type="hidden" name="contract_id" value="<?= $contract_id ?>">
+            
+            <div class="mb-3">
+                <label for="notes" class="form-label">Notes / Résolution:</label>
+                <textarea name="notes" id="notes" class="form-control" rows="3" required></textarea>
+            </div>
+            
+            <div class="d-flex gap-2">
+                <button type="submit" name="action" value="fix_issue" class="btn btn-success">
+                    <i class="fas fa-check-circle me-2"></i>Problème résolu - Envoyer à l'agent
+                </button>
+                <button type="submit" name="action" value="cancel_contract" class="btn btn-danger">
+                    <i class="fas fa-times-circle me-2"></i>Annuler le contrat
+                </button>
+            </div>
+        </form>
+    </div>
+<?php endif; ?>
+
         <div class="row">
             <!-- Left Column (Main Content) -->
             <div class="col-lg-8">

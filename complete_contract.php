@@ -125,17 +125,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $notificationData = [
                 'contract_id' => $contract_id,
                 'freight_request_id' => $contract['freight_request_id'] ?? null,
-                'status' => 'terminé'
+                'status' => $isReportingProblem ? 'problem' : 'terminé',
+                'link' => "admin-contract-details.php?id=$contract_id"
             ];
             
-            createNotification(
-                $admin_id,
-                'contract_completed',
-                'Contrat Complété',
-                "Le contrat #$contract_id a été complété par l'agent " . $_SESSION['user']['username'],
-                $contract_id,
-                $notificationData
-            );
+            if ($isReportingProblem) {
+                // Send problem notification to admin
+                createNotification(
+                    $admin_id,
+                    'contract_problem',
+                    'Problème Signalé',
+                    "L'agent " . $_SESSION['user']['username'] . " a signalé un problème avec le contrat #$contract_id",
+                    $contract_id,
+                    $notificationData
+                );
+            } else {
+                // Send regular completion notification
+                createNotification(
+                    $admin_id,
+                    'contract_completed',
+                    'Contrat Complété',
+                    "Le contrat #$contract_id a été complété par l'agent " . $_SESSION['user']['username'],
+                    $contract_id,
+                    $notificationData
+                );
+            }
         }
 
         // Send notification to the client

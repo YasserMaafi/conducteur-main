@@ -362,7 +362,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
                                         <div class="flex-grow-1">
                                             <div class="d-flex justify-content-between">
                                                 <strong><?= htmlspecialchars($n['title']) ?></strong>
-                                                <small class="text-muted ms-2"><?= time_elapsed_string($n['created_at']) ?></small>
+                                                <small class="text-muted ms-2"><?= date('d/m/Y H:i', strtotime($n['created_at'])) ?></small>
                                             </div>
                                             <small class="text-muted"><?= htmlspecialchars($n['message']) ?></small>
                                         </div>
@@ -589,42 +589,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) {
     <!-- Bootstrap & JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Helper function to display relative time
-        function time_elapsed_string(datetime, full = false) {
-            const now = new Date();
-            const ago = new Date(datetime);
-            const diff = Math.floor((now - ago) / 1000);
-            
-            const intervals = {
-                year: 31536000,
-                month: 2592000,
-                week: 604800,
-                day: 86400,
-                hour: 3600,
-                minute: 60,
-                second: 1
-            };
-            
-            const names = {
-                year: ['an', 'ans'],
-                month: ['mois', 'mois'],
-                week: ['semaine', 'semaines'],
-                day: ['jour', 'jours'],
-                hour: ['heure', 'heures'],
-                minute: ['minute', 'minutes'],
-                second: ['seconde', 'secondes']
-            };
-            
-            for (const [unit, seconds] of Object.entries(intervals)) {
-                const count = Math.floor(diff / seconds);
-                if (count >= 1) {
-                    const name = count > 1 && unit !== 'month' ? names[unit][1] : names[unit][0];
-                    return `Il y a ${count} ${name}`;
-                }
-            }
-            
-            return "À l'instant";
-        }
         
         // Form validation
         (function () {
