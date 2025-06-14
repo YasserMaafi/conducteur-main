@@ -1,0 +1,166 @@
+    table_name     |       column_name       |          data_type          | is_nullable | is_primary_key | foreign_table_name | foreign_column_name | is_unique
+-------------------+-------------------------+-----------------------------+-------------+----------------+--------------------+---------------------+-----------
+ admins            | admin_id                | integer                     | NO          | YES            |                    |                     | NO
+ admins            | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ admins            | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ admins            | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ admins            | department              | character varying           | YES         | NO             |                    |                     | NO
+ admins            | access_level            | integer                     | YES         | NO             |                    |                     | NO
+ agents            | agent_id                | integer                     | NO          | YES            |                    |                     | NO
+ agents            | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ agents            | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ agents            | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ agents            | badge_number            | character varying           | YES         | NO             |                    |                     | YES
+ agents            | id_gare                 | integer                     | YES         | NO             | gares              | id_gare             | NO
+ agents            | id_gare                 | integer                     | YES         | NO             | gares              | id_gare             | NO
+ clients           | client_id               | integer                     | NO          | YES            |                    |                     | NO
+ clients           | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ clients           | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ clients           | company_name            | character varying           | YES         | NO             |                    |                     | NO
+ clients           | phone_number            | character varying           | YES         | NO             |                    |                     | NO
+ clients           | account_code            | character varying           | YES         | NO             |                    |                     | YES
+ clients           | adresse                 | text                        | YES         | NO             |                    |                     | NO
+ clients           | created_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ contracts         | contract_id             | integer                     | NO          | YES            |                    |                     | NO
+ contracts         | transaction_type        | character varying           | YES         | NO             |                    |                     | NO
+ contracts         | payment_mode            | character varying           | YES         | NO             |                    |                     | NO
+ contracts         | gare_expÚditrice        | integer                     | YES         | NO             | gares              | id_gare             | NO
+ contracts         | gare_expÚditrice        | integer                     | YES         | NO             | gares              | id_gare             | NO
+ contracts         | gare_destinataire       | integer                     | YES         | NO             | gares              | id_gare             | NO
+ contracts         | gare_destinataire       | integer                     | YES         | NO             | gares              | id_gare             | NO
+ contracts         | source_branch           | character varying           | YES         | NO             |                    |                     | NO
+ contracts         | destination_branch      | character varying           | YES         | NO             |                    |                     | NO
+ contracts         | merchandise_description | text                        | YES         | NO             |                    |                     | NO
+ contracts         | sender_client           | integer                     | YES         | NO             | clients            | client_id           | NO
+ contracts         | sender_client           | integer                     | YES         | NO             | clients            | client_id           | NO
+ contracts         | sender_client           | integer                     | YES         | NO             | clients            | client_id           | NO
+ contracts         | shipment_weight         | numeric                     | YES         | NO             |                    |                     | NO
+ contracts         | shipment_date           | date                        | YES         | NO             |                    |                     | NO
+ contracts         | wagon_count             | integer                     | YES         | NO             |                    |                     | NO
+ contracts         | tarp_count              | integer                     | YES         | NO             |                    |                     | NO
+ contracts         | total_units             | integer                     | YES         | NO             |                    |                     | NO
+ contracts         | accessories             | text                        | YES         | NO             |                    |                     | NO
+ contracts         | expenses                | numeric                     | YES         | NO             |                    |                     | NO
+ contracts         | reimbursement           | numeric                     | YES         | NO             |                    |                     | NO
+ contracts         | paid_port               | numeric                     | YES         | NO             |                    |                     | NO
+ contracts         | total_port_due          | numeric                     | YES         | NO             |                    |                     | NO
+ contracts         | analytical_allocation   | character varying           | YES         | NO             |                    |                     | NO
+ contracts         | part_sncf               | numeric                     | YES         | NO             |                    |                     | NO
+ contracts         | part_oncf               | numeric                     | YES         | NO             |                    |                     | NO
+ contracts         | agent_id                | integer                     | YES         | NO             | agents             | agent_id            | NO
+ contracts         | agent_id                | integer                     | YES         | NO             | agents             | agent_id            | NO
+ contracts         | agent_id                | integer                     | YES         | NO             | agents             | agent_id            | NO
+ contracts         | agent_id                | integer                     | YES         | NO             | agents             | agent_id            | NO
+ contracts         | created_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ contracts         | status                  | character varying           | YES         | NO             |                    |                     | NO
+ contracts         | draft_created_at        | timestamp without time zone | YES         | NO             |                    |                     | NO
+ contracts         | draft_created_by        | integer                     | YES         | NO             | admins             | admin_id            | NO
+ contracts         | updated_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ contracts         | recipient_client        | integer                     | YES         | NO             | clients            | client_id           | NO
+ contracts         | freight_request_id      | integer                     | YES         | NO             | freight_requests   | id                  | NO
+ contracts         | payment_status          | character varying           | YES         | NO             |                    |                     | NO
+ contracts         | train_id                | integer                     | YES         | NO             | trains             | train_id            | NO
+ contracts         | reported_problems       | text                        | YES         | NO             |                    |                     | NO
+ contracts         | notes                   | text                        | YES         | NO             |                    |                     | NO
+ drivers           | driver_id               | integer                     | NO          | YES            |                    |                     | NO
+ drivers           | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ drivers           | user_id                 | integer                     | NO          | NO             | users              | user_id             | YES
+ drivers           | license_number          | character varying           | YES         | NO             |                    |                     | YES
+ drivers           | train_types             | character varying           | YES         | NO             |                    |                     | NO
+ freight_requests  | id                      | integer                     | NO          | YES            |                    |                     | NO
+ freight_requests  | sender_client_id        | integer                     | NO          | NO             | clients            | client_id           | NO
+ freight_requests  | sender_client_id        | integer                     | NO          | NO             | clients            | client_id           | NO
+ freight_requests  | sender_client_id        | integer                     | NO          | NO             | clients            | client_id           | NO
+ freight_requests  | recipient_name          | character varying           | NO          | NO             |                    |                     | NO
+ freight_requests  | recipient_contact       | character varying           | NO          | NO             |                    |                     | NO
+ freight_requests  | gare_depart             | integer                     | NO          | NO             | gares              | id_gare             | NO
+ freight_requests  | gare_depart             | integer                     | NO          | NO             | gares              | id_gare             | NO
+ freight_requests  | gare_arrivee            | integer                     | NO          | NO             | gares              | id_gare             | NO
+ freight_requests  | gare_arrivee            | integer                     | NO          | NO             | gares              | id_gare             | NO
+ freight_requests  | quantity                | numeric                     | YES         | NO             |                    |                     | NO
+ freight_requests  | date_start              | date                        | NO          | NO             |                    |                     | NO
+ freight_requests  | mode_paiement           | character varying           | NO          | NO             |                    |                     | NO
+ freight_requests  | status                  | character varying           | YES         | NO             |                    |                     | NO
+ freight_requests  | admin_notes             | text                        | YES         | NO             |                    |                     | NO
+ freight_requests  | created_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ freight_requests  | updated_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ freight_requests  | merchandise_id          | integer                     | YES         | NO             | merchandise        | merchandise_id      | NO
+ freight_requests  | merchandise_id          | integer                     | YES         | NO             | merchandise        | merchandise_id      | NO
+ freight_requests  | account_code            | character varying           | YES         | NO             | clients            | account_code        | NO
+ freight_requests  | recipient_client_id     | integer                     | YES         | NO             | clients            | client_id           | NO
+ freight_requests  | recipient_client_id     | integer                     | YES         | NO             | clients            | client_id           | NO
+ freight_requests  | quantity_unit           | character varying           | YES         | NO             |                    |                     | NO
+ freight_requests  | wagon_count             | integer                     | YES         | NO             |                    |                     | NO
+ freight_requests  | assigned_train_id       | integer                     | YES         | NO             | trains             | train_id            | NO
+ freight_requests  | assigned_wagons         | ARRAY                       | YES         | NO             |                    |                     | NO
+ gares             | id_gare                 | integer                     | NO          | YES            |                    |                     | NO
+ gares             | code_gare               | character varying           | NO          | NO             |                    |                     | YES
+ gares             | libelle                 | character varying           | NO          | NO             |                    |                     | YES
+ gares             | ville                   | character varying           | YES         | NO             |                    |                     | NO
+ gares             | region                  | character varying           | YES         | NO             |                    |                     | NO
+ gares             | pays                    | character varying           | YES         | NO             |                    |                     | NO
+ gares             | type_gare               | character varying           | YES         | NO             |                    |                     | NO
+ gares             | statut                  | character varying           | YES         | NO             |                    |                     | NO
+ gares             | date_creation           | timestamp without time zone | YES         | NO             |                    |                     | NO
+ gares             | date_modification       | timestamp without time zone | YES         | NO             |                    |                     | NO
+ merchandise       | merchandise_id          | integer                     | NO          | YES            |                    |                     | NO
+ merchandise       | code                    | character varying           | NO          | NO             |                    |                     | YES
+ merchandise       | description             | character varying           | NO          | NO             |                    |                     | NO
+ merchandise       | category                | character varying           | YES         | NO             |                    |                     | NO
+ merchandise       | hazardous               | boolean                     | YES         | NO             |                    |                     | NO
+ merchandise       | volume_class            | character varying           | YES         | NO             |                    |                     | NO
+ merchandise       | created_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ merchandise       | updated_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ notifications     | id                      | integer                     | NO          | YES            |                    |                     | NO
+ notifications     | user_id                 | integer                     | NO          | NO             | users              | user_id             | NO
+ notifications     | user_id                 | integer                     | NO          | NO             | users              | user_id             | NO
+ notifications     | type                    | character varying           | NO          | NO             |                    |                     | NO
+ notifications     | title                   | character varying           | NO          | NO             |                    |                     | NO
+ notifications     | message                 | text                        | NO          | NO             |                    |                     | NO
+ notifications     | is_read                 | boolean                     | YES         | NO             |                    |                     | NO
+ notifications     | metadata                | jsonb                       | NO          | NO             |                    |                     | NO
+ notifications     | created_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ notifications     | related_request_id      | integer                     | YES         | NO             | freight_requests   | id                  | NO
+ notifications     | related_request_id      | integer                     | YES         | NO             | freight_requests   | id                  | NO
+ payments          | payment_id              | integer                     | NO          | YES            |                    |                     | NO
+ payments          | contract_id             | integer                     | YES         | NO             | contracts          | contract_id         | NO
+ payments          | client_id               | integer                     | YES         | NO             | users              | user_id             | NO
+ payments          | amount                  | numeric                     | NO          | NO             |                    |                     | NO
+ payments          | currency                | character varying           | YES         | NO             |                    |                     | NO
+ payments          | payment_method          | character varying           | YES         | NO             |                    |                     | NO
+ payments          | payment_date            | timestamp without time zone | YES         | NO             |                    |                     | NO
+ payments          | status                  | character varying           | YES         | NO             |                    |                     | NO
+ payments          | reference_number        | character varying           | YES         | NO             |                    |                     | YES
+ payments          | notes                   | text                        | YES         | NO             |                    |                     | NO
+ region_distances  | id                      | integer                     | NO          | YES            |                    |                     | NO
+ region_distances  | from_region             | character varying           | NO          | NO             |                    |                     | YES
+ region_distances  | to_region               | character varying           | NO          | NO             |                    |                     | YES
+ region_distances  | estimated_distance_km   | numeric                     | NO          | NO             |                    |                     | NO
+ tariffs           | tariff_id               | integer                     | NO          | YES            |                    |                     | NO
+ tariffs           | client_id               | integer                     | NO          | NO             | clients            | client_id           | NO
+ tariffs           | client_id               | integer                     | NO          | NO             | clients            | client_id           | NO
+ tariffs           | base_rate_per_km        | numeric                     | NO          | NO             |                    |                     | NO
+ tariffs           | created_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ trains            | train_id                | integer                     | NO          | YES            |                    |                     | NO
+ trains            | train_number            | character varying           | NO          | NO             |                    |                     | YES
+ trains            | status                  | character varying           | YES         | NO             |                    |                     | NO
+ trains            | next_available_date     | date                        | YES         | NO             |                    |                     | NO
+ trains            | current_route           | character varying           | YES         | NO             |                    |                     | NO
+ users             | user_id                 | integer                     | NO          | YES            |                    |                     | NO
+ users             | username                | character varying           | NO          | NO             |                    |                     | YES
+ users             | password_hash           | character varying           | NO          | NO             |                    |                     | NO
+ users             | email                   | character varying           | NO          | NO             |                    |                     | YES
+ users             | role                    | character varying           | NO          | NO             |                    |                     | NO
+ users             | created_at              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ users             | last_login              | timestamp without time zone | YES         | NO             |                    |                     | NO
+ users             | is_active               | boolean                     | YES         | NO             |                    |                     | NO
+ wagon_assignments | assignment_id           | integer                     | NO          | YES            |                    |                     | NO
+ wagon_assignments | wagon_id                | integer                     | YES         | NO             | wagons             | wagon_id            | NO
+ wagon_assignments | train_id                | integer                     | YES         | NO             | trains             | train_id            | NO
+ wagon_assignments | assigned_date           | date                        | YES         | NO             |                    |                     | NO
+ wagon_assignments | status                  | character varying           | YES         | NO             |                    |                     | NO
+ wagons            | wagon_id                | integer                     | NO          | YES            |                    |                     | NO
+ wagons            | wagon_number            | character varying           | NO          | NO             |                    |                     | YES
+ wagons            | status                  | character varying           | YES         | NO             |                    |                     | NO
+ wagons            | current_location        | character varying           | YES         | NO             |                    |                     | NO
+(163 rows)

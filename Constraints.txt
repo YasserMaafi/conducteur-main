@@ -1,0 +1,93 @@
+              constraint_name               | constraint_type |    table_name     |                                                                                                                                                                                                                                                                                                                                                                                                       definition                                                                                                                                                                                                                                                                                                                                                                    
+--------------------------------------------+-----------------+-------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ contracts_payment_status_check             | C               | contracts         | CHECK (payment_status::text = ANY (ARRAY['unpaid'::character varying, 'partially_paid'::character varying, 'fully_paid'::character varying]::text[]))
+ non_negative_weight                        | C               | contracts         | CHECK (shipment_weight >= 0::numeric)
+ valid_status                               | C               | contracts         | CHECK (status::text = ANY (ARRAY['draft'::character varying::text, 'en_cours'::character varying::text, 'terminÚ'::character varying::text, 'annulÚ'::character varying::text, 'validÚ'::character varying::text, 'problem'::character varying::text]))
+ freight_requests_status_check              | C               | freight_requests  | CHECK (status::text = ANY (ARRAY['pending'::character varying, 'accepted'::character varying, 'rejected'::character varying, 'client_confirmed'::character varying, 'client_rejected'::character varying, 'contract_created'::character varying, 'contract_completed'::character varying]::text[]))
+ gares_statut_check                         | C               | gares             | CHECK (statut::text = ANY (ARRAY['EN SERVICE'::character varying, 'FERMEE'::character varying]::text[]))
+ gares_type_gare_check                      | C               | gares             | CHECK (type_gare::text = ANY (ARRAY['gare principale'::character varying, 'voie de port'::character varying, 'embranchement'::character varying, 'Gare ferroviaire'::character varying]::text[]))
+ notifications_type_check                   | C               | notifications     | CHECK (type::text = ANY (ARRAY['request_submitted'::character varying, 'request_approved'::character varying, 'request_rejected'::character varying, 'client_confirmed'::character varying, 'client_rejected'::character varying, 'draft_created'::character varying, 'contract_completed'::character varying, 'payment_received'::character varying, 'contract_draft'::character varying, 'demande_refusÚe'::character varying, 'nouvelle_demande'::character varying, 'confirmation_paiement'::character varying, 'confirmation_dÚpart'::character varying, 'confirmation_arrivage'::character varying, 'erreur_paiement'::character varying, 'info_service'::character varying, 'request_accepted'::character varying, 'confirmation_service'::character varying, 'new_contract_draft'::character varying]::text[]))
+ users_role_check                           | C               | users             | CHECK (role::text = ANY (ARRAY['admin'::character varying, 'agent'::character varying, 'client'::character varying, 'driver'::character varying]::text[]))
+ admins_user_id_fkey                        | F               | admins            | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ fk_admin_user                              | F               | admins            | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ fk_user                                    | F               | admins            | FOREIGN KEY (user_id) REFERENCES users(user_id)
+ agents_id_gare_fkey                        | F               | agents            | FOREIGN KEY (id_gare) REFERENCES gares(id_gare) ON DELETE SET NULL
+ agents_user_id_fkey                        | F               | agents            | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ fk_agent_gare                              | F               | agents            | FOREIGN KEY (id_gare) REFERENCES gares(id_gare) ON DELETE SET NULL
+ fk_agent_user                              | F               | agents            | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ fk_agents_user                             | F               | agents            | FOREIGN KEY (user_id) REFERENCES users(user_id)
+ clients_user_id_fkey                       | F               | clients           | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ fk_client_user                             | F               | clients           | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ contracts_agent_id_fkey                    | F               | contracts         | FOREIGN KEY (agent_id) REFERENCES agents(agent_id)
+ contracts_freight_request_id_fkey          | F               | contracts         | FOREIGN KEY (freight_request_id) REFERENCES freight_requests(id)
+ contracts_gare_destinataire_fkey           | F               | contracts         | FOREIGN KEY (gare_destinataire) REFERENCES gares(id_gare)
+ contracts_gare_expÚditrice_fkey            | F               | contracts         | FOREIGN KEY ("gare_expÚditrice") REFERENCES gares(id_gare)
+ contracts_recipient_client_fkey            | F               | contracts         | FOREIGN KEY (recipient_client) REFERENCES clients(client_id)
+ contracts_sender_client_fkey               | F               | contracts         | FOREIGN KEY (sender_client) REFERENCES clients(client_id)
+ fk_agent                                   | F               | contracts         | FOREIGN KEY (agent_id) REFERENCES agents(agent_id)
+ fk_contract_agent                          | F               | contracts         | FOREIGN KEY (agent_id) REFERENCES agents(agent_id) ON DELETE SET NULL
+ fk_contract_draft_creator                  | F               | contracts         | FOREIGN KEY (draft_created_by) REFERENCES admins(admin_id) ON DELETE SET NULL
+ fk_contract_gare_destinataire              | F               | contracts         | FOREIGN KEY (gare_destinataire) REFERENCES gares(id_gare) ON DELETE SET NULL
+ fk_contract_gare_expeditrice               | F               | contracts         | FOREIGN KEY ("gare_expÚditrice") REFERENCES gares(id_gare) ON DELETE SET NULL
+ fk_contract_sender_client                  | F               | contracts         | FOREIGN KEY (sender_client) REFERENCES clients(client_id) ON DELETE SET NULL
+ fk_contracts_agent                         | F               | contracts         | FOREIGN KEY (agent_id) REFERENCES agents(agent_id)
+ fk_contracts_trains                        | F               | contracts         | FOREIGN KEY (train_id) REFERENCES trains(train_id)
+ fk_sender                                  | F               | contracts         | FOREIGN KEY (sender_client) REFERENCES clients(client_id)
+ drivers_user_id_fkey                       | F               | drivers           | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ fk_driver_user                             | F               | drivers           | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ fk_account_code                            | F               | freight_requests  | FOREIGN KEY (account_code) REFERENCES clients(account_code)
+ fk_freight_arrivee_gare                    | F               | freight_requests  | FOREIGN KEY (gare_arrivee) REFERENCES gares(id_gare) ON DELETE RESTRICT
+ fk_freight_depart_gare                     | F               | freight_requests  | FOREIGN KEY (gare_depart) REFERENCES gares(id_gare) ON DELETE RESTRICT
+ fk_freight_merchandise                     | F               | freight_requests  | FOREIGN KEY (merchandise_id) REFERENCES merchandise(merchandise_id) ON DELETE SET NULL
+ fk_freight_recipient_client                | F               | freight_requests  | FOREIGN KEY (recipient_client_id) REFERENCES clients(client_id) ON DELETE SET NULL
+ fk_freight_sender_client                   | F               | freight_requests  | FOREIGN KEY (sender_client_id) REFERENCES clients(client_id) ON DELETE CASCADE
+ fk_merchandise                             | F               | freight_requests  | FOREIGN KEY (merchandise_id) REFERENCES merchandise(merchandise_id)
+ fk_sender_client                           | F               | freight_requests  | FOREIGN KEY (sender_client_id) REFERENCES clients(client_id)
+ freight_requests_assigned_train_id_fkey    | F               | freight_requests  | FOREIGN KEY (assigned_train_id) REFERENCES trains(train_id)
+ freight_requests_client_id_fkey            | F               | freight_requests  | FOREIGN KEY (sender_client_id) REFERENCES clients(client_id)
+ freight_requests_gare_arrivee_fkey         | F               | freight_requests  | FOREIGN KEY (gare_arrivee) REFERENCES gares(id_gare)
+ freight_requests_gare_depart_fkey          | F               | freight_requests  | FOREIGN KEY (gare_depart) REFERENCES gares(id_gare)
+ freight_requests_recipient_client_id_fkey  | F               | freight_requests  | FOREIGN KEY (recipient_client_id) REFERENCES clients(client_id)
+ fk_notification_request                    | F               | notifications     | FOREIGN KEY (related_request_id) REFERENCES freight_requests(id) ON DELETE SET NULL
+ fk_notification_user                       | F               | notifications     | FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+ notifications_related_request_id_fkey      | F               | notifications     | FOREIGN KEY (related_request_id) REFERENCES freight_requests(id)
+ notifications_user_id_fkey                 | F               | notifications     | FOREIGN KEY (user_id) REFERENCES users(user_id)
+ payments_client_id_fkey                    | F               | payments          | FOREIGN KEY (client_id) REFERENCES users(user_id)
+ payments_contract_id_fkey                  | F               | payments          | FOREIGN KEY (contract_id) REFERENCES contracts(contract_id)
+ fk_tariff_client                           | F               | tariffs           | FOREIGN KEY (client_id) REFERENCES clients(client_id) ON DELETE CASCADE
+ tariffs_client_id_fkey                     | F               | tariffs           | FOREIGN KEY (client_id) REFERENCES clients(client_id) ON DELETE CASCADE
+ wagon_assignments_train_id_fkey            | F               | wagon_assignments | FOREIGN KEY (train_id) REFERENCES trains(train_id)
+ wagon_assignments_wagon_id_fkey            | F               | wagon_assignments | FOREIGN KEY (wagon_id) REFERENCES wagons(wagon_id)
+ admins_pkey                                | P               | admins            | PRIMARY KEY (admin_id)
+ agents_pkey                                | P               | agents            | PRIMARY KEY (agent_id)
+ clients_pkey                               | P               | clients           | PRIMARY KEY (client_id)
+ contracts_pkey                             | P               | contracts         | PRIMARY KEY (contract_id)
+ drivers_pkey                               | P               | drivers           | PRIMARY KEY (driver_id)
+ freight_requests_pkey                      | P               | freight_requests  | PRIMARY KEY (id)
+ gares_pkey                                 | P               | gares             | PRIMARY KEY (id_gare)
+ merchandise_pkey                           | P               | merchandise       | PRIMARY KEY (merchandise_id)
+ notifications_pkey                         | P               | notifications     | PRIMARY KEY (id)
+ payments_pkey                              | P               | payments          | PRIMARY KEY (payment_id)
+ region_distances_pkey                      | P               | region_distances  | PRIMARY KEY (id)
+ tariffs_pkey                               | P               | tariffs           | PRIMARY KEY (tariff_id)
+ trains_pkey                                | P               | trains            | PRIMARY KEY (train_id)
+ users_pkey                                 | P               | users             | PRIMARY KEY (user_id)
+ wagon_assignments_pkey                     | P               | wagon_assignments | PRIMARY KEY (assignment_id)
+ wagons_pkey                                | P               | wagons            | PRIMARY KEY (wagon_id)
+ admins_user_id_key                         | U               | admins            | UNIQUE (user_id)
+ agents_badge_number_key                    | U               | agents            | UNIQUE (badge_number)
+ agents_user_id_key                         | U               | agents            | UNIQUE (user_id)
+ clients_user_id_key                        | U               | clients           | UNIQUE (user_id)
+ unique_account_code                        | U               | clients           | UNIQUE (account_code)
+ drivers_license_number_key                 | U               | drivers           | UNIQUE (license_number)
+ drivers_user_id_key                        | U               | drivers           | UNIQUE (user_id)
+ gares_code_gare_key                        | U               | gares             | UNIQUE (code_gare)
+ gares_libelle_key                          | U               | gares             | UNIQUE (libelle)
+ merchandise_code_key                       | U               | merchandise       | UNIQUE (code)
+ payments_reference_number_key              | U               | payments          | UNIQUE (reference_number)
+ region_distances_from_region_to_region_key | U               | region_distances  | UNIQUE (from_region, to_region)
+ trains_train_number_key                    | U               | trains            | UNIQUE (train_number)
+ users_email_key                            | U               | users             | UNIQUE (email)
+ users_username_key                         | U               | users             | UNIQUE (username)
+ wagons_wagon_number_key                    | U               | wagons            | UNIQUE (wagon_number)
+(90 rows)
