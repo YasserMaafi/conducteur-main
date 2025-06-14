@@ -10,7 +10,7 @@ if (!isLoggedIn()) {
 if ($_SESSION['user']['role'] !== 'driver') {
     die("Accès réservé aux conducteurs");
 }
-$ngrok_url = 'https://cb7d-41-230-69-124.ngrok-free.app';
+$ngrok_url = 'https://2353-41-230-77-145.ngrok-free.app ';
 
 $driver_id = $_SESSION['user']['id']; // Updated to use new session structure
 ?>

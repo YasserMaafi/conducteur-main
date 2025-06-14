@@ -117,35 +117,64 @@ $notifCount = $notifCountStmt->fetch()['count'];
     .status-delivered   { background:#e2e3e5; color:#383d41; }
     .status-rejected    { background:#f8d7da; color:#721c24; }
     
-    /* Notification dropdown styles */
+    /* Enhanced Notification dropdown styles */
     .dropdown-notifications {
-      min-width: 320px;
+      min-width: 350px;
       padding: 0;
-      max-height: 400px;
+      max-height: 450px;
       overflow-y: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border: none;
+      border-radius: 8px;
     }
     .dropdown-notifications .dropdown-header {
-      background-color: #f8f9fa;
-      padding: 10px 15px;
-      border-bottom: 1px solid #e9ecef;
+      background-color: #1a3c8f;
+      color: white;
+      padding: 12px 15px;
       font-weight: 600;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
     }
     .dropdown-notifications .dropdown-footer {
       background-color: #f8f9fa;
       padding: 10px;
       text-align: center;
       border-top: 1px solid #e9ecef;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
     }
     .notification-badge {
       position: absolute;
-      top: -5px;
-      right: -5px;
-      font-size: 0.6rem;
-      padding: 2px 5px;
+      top: -8px;
+      right: -8px;
+      font-size: 0.7rem;
+      padding: 3px 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
     .navbar-notification-icon {
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       position: relative;
+    }
+    .dropdown-item.notification-item {
+      padding: 12px 15px;
+      border-bottom: 1px solid #f1f1f1;
+      transition: all 0.2s ease;
+    }
+    .dropdown-item.notification-item:hover {
+      background-color: #f5f9ff;
+    }
+    .dropdown-item.notification-item.unread {
+      background-color: #f0f7ff;
+      border-left: 4px solid #0d6efd;
+    }
+    .dropdown-item.notification-item strong {
+      color: #1a3c8f;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .dropdown-notifications .btn-link {
+      color: #1a3c8f;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -176,7 +205,10 @@ $notifCount = $notifCountStmt->fetch()['count'];
         
         <!-- In the dropdown-notifications section of client-dashboard.php -->
 <?php if (empty($notifications)): ?>
-    <div class="p-3 text-center text-muted">Aucune nouvelle notification</div>
+    <div class="p-4 text-center">
+        <i class="fas fa-bell-slash fa-2x text-muted mb-3"></i>
+        <p class="mb-0 text-muted">Aucune nouvelle notification</p>
+    </div>
 <?php else: ?>
     <?php foreach ($notifications as $n): ?>
         <?php 
@@ -192,13 +224,30 @@ $notifCount = $notifCountStmt->fetch()['count'];
             }
             
             $cls = $n['is_read'] ? '' : 'unread';
+            
+            // Determine icon based on notification type
+            $icon = 'fa-bell';
+            if (strpos($n['type'], 'contract') !== false) {
+                $icon = 'fa-file-contract';
+            } elseif (strpos($n['type'], 'payment') !== false) {
+                $icon = 'fa-money-bill';
+            } elseif (strpos($n['type'], 'shipment') !== false || strpos($n['type'], 'arrivage') !== false) {
+                $icon = 'fa-truck';
+            }
         ?>
-        <a href="<?= htmlspecialchars($link) ?>" class="dropdown-item notification-item <?= $cls ?> px-3 py-2 border-bottom" data-id="<?= $n['id'] ?>">
-            <div class="d-flex justify-content-between">
-                <strong><?= htmlspecialchars($n['title']) ?></strong>
-                <small class="text-muted"><?= time_elapsed_string($n['created_at']) ?></small>
+        <a href="<?= htmlspecialchars($link) ?>" class="dropdown-item notification-item <?= $cls ?>" data-id="<?= $n['id'] ?>">
+            <div class="d-flex">
+                <div class="me-3 pt-1">
+                    <i class="fas <?= $icon ?> text-primary"></i>
+                </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between">
+                        <strong><?= htmlspecialchars($n['title']) ?></strong>
+                        <small class="text-muted ms-2"><?= time_elapsed_string($n['created_at']) ?></small>
+                    </div>
+                    <small class="text-muted"><?= htmlspecialchars($n['message']) ?></small>
+                </div>
             </div>
-            <small><?= htmlspecialchars($n['message']) ?></small>
         </a>
     <?php endforeach; ?>
 <?php endif; ?>
@@ -421,7 +470,7 @@ $notifCount = $notifCountStmt->fetch()['count'];
                           <a href="client-contract-details.php?id=<?= $s['contract_id'] ?>" class="btn btn-sm btn-outline-primary">
                             <i class="fas fa-eye"></i>
                           </a>
-                          <a href="track_shipment.php?id=<?= $s['contract_id'] ?>" class="btn btn-sm btn-info ms-1">
+                          <a href="interface.php?>" class="btn btn-sm btn-info ms-1">
                             <i class="fas fa-map-marked-alt"></i>
                           </a>
                         </td>

@@ -1,21 +1,26 @@
+<?php
+// This file contains the CSS styles for notifications
+?>
 <style>
-    .notification-dropdown .notification-icon {
+    .notification-icon {
         width: 36px;
         height: 36px;
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size: 14px;
     }
     
-    .notification-item {
-        transition: background-color 0.2s;
+    .notification-dropdown .dropdown-item:hover {
+        background-color: #f8f9fa;
     }
     
-    .notification-item:hover {
+    .notification-dropdown .notification-item.unread {
         background-color: rgba(13, 110, 253, 0.05);
+        border-left: 3px solid #0d6efd;
     }
     
-    .notification-item:active {
-        background-color: rgba(13, 110, 253, 0.1);
+    .notification-dropdown .dropdown-header {
+        border-bottom: 1px solid #e9ecef;
     }
 </style>

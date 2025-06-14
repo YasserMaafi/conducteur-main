@@ -661,7 +661,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 mb-3">
-                                        <label class="form-label">Prix Proposé (€)</label>
+                                        <label class="form-label">Prix Proposé (TND)</label>
                                         <input type="text" class="form-control" value="<?= htmlspecialchars($contract['total_port_due']) ?>" readonly>
                                     </div>
                                 </div>
@@ -709,34 +709,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <h5 class="mb-3"><i class="fas fa-money-bill-wave me-2"></i>Détails Financiers (À Compléter)</h5>
                                 <div class="row mb-3">
                                     <div class="col-md-4">
-                                        <label class="form-label">Frais (€)</label>
+                                        <label class="form-label">Frais (TND)</label>
                                         <input type="number" name="expenses" class="form-control" 
                                             value="<?= htmlspecialchars($contract['expenses'] ?? '') ?>" step="0.01" min="0">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">Remboursement (€)</label>
+                                        <label class="form-label">Remboursement (TND)</label>
                                         <input type="number" name="reimbursement" class="form-control" 
                                             value="<?= htmlspecialchars($contract['reimbursement'] ?? '') ?>" step="0.01" min="0">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">Port Payé (€)</label>
+                                        <label class="form-label">Port Payé (TND)</label>
                                         <input type="number" name="paid_port" class="form-control" 
                                             value="<?= htmlspecialchars($contract['paid_port'] ?? '') ?>" step="0.01" min="0">
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-md-4">
-                                        <label class="form-label">Port Dû Total (€)</label>
+                                        <label class="form-label">Port Dû Total (TND)</label>
                                         <input type="number" name="total_port_due" class="form-control" 
                                             value="<?= htmlspecialchars($contract['total_port_due'] ?? '') ?>" step="0.01" min="0">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">Part SNCF (€)</label>
+                                        <label class="form-label">Part SNCF (TND)</label>
                                         <input type="number" name="part_sncf" class="form-control" 
                                             value="<?= htmlspecialchars($contract['part_sncf'] ?? '') ?>" step="0.01" min="0">
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label">Part ONCF (€)</label>
+                                        <label class="form-label">Part ONCF (TND)</label>
                                         <input type="number" name="part_oncf" class="form-control" 
                                             value="<?= htmlspecialchars($contract['part_oncf'] ?? '') ?>" step="0.01" min="0">
                                     </div>

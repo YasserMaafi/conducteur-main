@@ -75,6 +75,8 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <span class="text-white me-3">
                     <i class="fas fa-building me-1"></i><?= htmlspecialchars($client['company_name']) ?>
                 </span>
+                <?php include 'includes/client_notification_dropdown.php'; ?>
+                <?php include 'includes/notification_styles.php'; ?>
                 <a href="logout.php" class="btn btn-outline-light">
                     <i class="fas fa-sign-out-alt"></i>
                 </a>

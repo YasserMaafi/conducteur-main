@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
                 'train_number' => $train['train_number']
             ];
             
-            $message = "Votre demande #$request_id a été approuvée. Prix: {$_POST['price']}€, " .
+            $message = "Votre demande #$request_id a été approuvée. Prix: {$_POST['price']}TND, " .
                       "Wagons: $wagon_count, Train: {$train['train_number']}, ETA: {$_POST['eta']}";
             $notification_type = 'request_approved';
             $notification_title = 'Demande Approuvée';
@@ -675,7 +675,7 @@ $confirmed_requests = $pdo->query("
                                     <?php if (!empty($metadata)): ?>
                                         <div class="mt-1">
                                             <?php if (isset($metadata['price'])): ?>
-                                                <small class="text-success"><?= htmlspecialchars($metadata['price']) ?> €</small>
+                                                <small class="text-success"><?= htmlspecialchars($metadata['price']) ?> TND</small>
                                             <?php endif; ?>
                                             <?php if (isset($metadata['wagon_count'])): ?>
                                                 <small class="text-primary ms-2"><?= htmlspecialchars($metadata['wagon_count']) ?> wagons</small>
@@ -1085,7 +1085,7 @@ $confirmed_requests = $pdo->query("
                                 <?php if (isset($meta['price'])): ?>
                                     <span class="badge bg-light text-dark">
                                         <i class="fas fa-euro-sign text-success me-1"></i>
-                                        <?= number_format($meta['price'], 2, ',', ' ') ?> €
+                                        <?= number_format($meta['price'], 2, ',', ' ') ?> TND
                                     </span>
                                 <?php endif; ?>
                                 <?php if (isset($meta['wagon_count'])): ?>
@@ -1345,18 +1345,18 @@ $confirmed_requests = $pdo->query("
                                     readonly>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Tarif Client (€/km)</label>
+                                <label class="form-label">Tarif Client (TND/km)</label>
                                 <input type="number" class="form-control tariff-input" 
                                     id="tariff_<?= $request['request_id'] ?>" 
                                     step="0.01" readonly>
 </div>
                             <div class="col-md-6">
-                                <label class="form-label">Prix Calculé (€)</label>
+                                <label class="form-label">Prix Calculé (TND)</label>
                                 <input type="number" class="form-control calculated-price" 
                                     id="calculated_price_<?= $request['request_id'] ?>" readonly>
                             </div>
                             <div class="col-md-6">
-                                <label class="form-label">Prix Final (€) <span class="text-danger">*</span></label>
+                                <label class="form-label">Prix Final (TND) <span class="text-danger">*</span></label>
                                 <input type="number" name="price" id="final_price_<?= $request['request_id'] ?>" 
                                     class="form-control price-input" step="0.01" min="0" required>
                             </div>

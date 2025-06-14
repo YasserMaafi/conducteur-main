@@ -659,7 +659,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <h5 class="mb-3"><i class="fas fa-money-bill-wave me-2"></i>Informations Financières</h5>
                                 <div class="row mb-3">
                                     <div class="col-md-6">
-                                        <label class="form-label">Prix Proposé (€) <span class="text-danger">*</span></label>
+                                        <label class="form-label">Prix Proposé <span class="text-danger">*</span></label>
                                         <input type="number" name="price_quoted" class="form-control" value="<?= htmlspecialchars($defaultPrice) ?>" step="0.01" min="0" required>
                                     </div>
                                     <div class="col-md-6">

@@ -71,6 +71,66 @@ $requests = $requestsStmt->fetchAll();
     .status-in_transit   { background: #cce5ff; color: #004085; }
     .status-delivered    { background: #e2e3e5; color: #383d41; }
     .status-rejected     { background: #f8d7da; color: #721c24; }
+    
+    /* Enhanced Notification dropdown styles */
+    .dropdown-notifications {
+      min-width: 350px;
+      padding: 0;
+      max-height: 450px;
+      overflow-y: auto;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border: none;
+      border-radius: 8px;
+    }
+    .dropdown-notifications .dropdown-header {
+      background-color: #1a3c8f;
+      color: white;
+      padding: 12px 15px;
+      font-weight: 600;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+    }
+    .dropdown-notifications .dropdown-footer {
+      background-color: #f8f9fa;
+      padding: 10px;
+      text-align: center;
+      border-top: 1px solid #e9ecef;
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+    .notification-badge {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      font-size: 0.7rem;
+      padding: 3px 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .navbar-notification-icon {
+      font-size: 1.3rem;
+      position: relative;
+    }
+    .dropdown-item.notification-item {
+      padding: 12px 15px;
+      border-bottom: 1px solid #f1f1f1;
+      transition: all 0.2s ease;
+    }
+    .dropdown-item.notification-item:hover {
+      background-color: #f5f9ff;
+    }
+    .dropdown-item.notification-item.unread {
+      background-color: #f0f7ff;
+      border-left: 4px solid #0d6efd;
+    }
+    .dropdown-item.notification-item strong {
+      color: #1a3c8f;
+      display: block;
+      margin-bottom: 3px;
+    }
+    .dropdown-notifications .btn-link {
+      color: #1a3c8f;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
@@ -82,6 +142,87 @@ $requests = $requestsStmt->fetchAll();
         <i class="fas fa-train me-2"></i>SNCFT Client
       </a>
       <div class="d-flex align-items-center">
+        <!-- Notification Dropdown -->
+        <div class="dropdown me-3">
+            <?php
+            // Get unread notifications count
+            $notifCountStmt = $pdo->prepare("SELECT COUNT(*) AS count FROM notifications WHERE user_id = ? AND is_read = FALSE");
+            $notifCountStmt->execute([$_SESSION['user']['id']]);
+            $notifCount = $notifCountStmt->fetch()['count'];
+            
+            // Get recent notifications
+            $notifStmt = $pdo->prepare("SELECT * FROM notifications WHERE user_id = ? ORDER BY created_at DESC LIMIT 5");
+            $notifStmt->execute([$_SESSION['user']['id']]);
+            $notifications = $notifStmt->fetchAll();
+            ?>
+            <button class="btn btn-primary position-relative" type="button" id="dropdownNotification" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="navbar-notification-icon">
+                    <i class="fas fa-bell"></i>
+                    <?php if ($notifCount > 0): ?>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+                            <?= $notifCount > 9 ? '9+' : $notifCount ?>
+                        </span>
+                    <?php endif; ?>
+                </span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-end dropdown-notifications" aria-labelledby="dropdownNotification">
+                <div class="dropdown-header">
+                    <i class="fas fa-bell me-2"></i>Notifications
+                </div>
+                
+                <?php if (empty($notifications)): ?>
+                    <div class="p-4 text-center">
+                        <i class="fas fa-bell-slash fa-2x text-muted mb-3"></i>
+                        <p class="mb-0 text-muted">Aucune nouvelle notification</p>
+                    </div>
+                <?php else: ?>
+                    <?php foreach ($notifications as $n): ?>
+                        <?php 
+                            // Parse metadata if it exists
+                            $metadata = json_decode($n['metadata'] ?? '{}', true);
+                            
+                            // Determine the link based on notification type
+                            $link = '#';
+                            if ($n['type'] === 'contract_completed' && isset($metadata['contract_id'])) {
+                                $link = "client-contract-details.php?id=" . $metadata['contract_id'];
+                            } elseif ($n['related_request_id']) {
+                                $link = "request_details.php?id=" . $n['related_request_id'];
+                            }
+                            
+                            $cls = $n['is_read'] ? '' : 'unread';
+                            
+                            // Determine icon based on notification type
+                            $icon = 'fa-bell';
+                            if (strpos($n['type'], 'contract') !== false) {
+                                $icon = 'fa-file-contract';
+                            } elseif (strpos($n['type'], 'payment') !== false) {
+                                $icon = 'fa-money-bill';
+                            } elseif (strpos($n['type'], 'shipment') !== false || strpos($n['type'], 'arrivage') !== false) {
+                                $icon = 'fa-truck';
+                            }
+                        ?>
+                        <a href="<?= htmlspecialchars($link) ?>" class="dropdown-item notification-item <?= $cls ?>" data-id="<?= $n['id'] ?>">
+                            <div class="d-flex">
+                                <div class="me-3 pt-1">
+                                    <i class="fas <?= $icon ?> text-primary"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between">
+                                        <strong><?= htmlspecialchars($n['title']) ?></strong>
+                                        <small class="text-muted ms-2"><?= time_elapsed_string($n['created_at']) ?></small>
+                                    </div>
+                                    <small class="text-muted"><?= htmlspecialchars($n['message']) ?></small>
+                                </div>
+                            </div>
+                        </a>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                
+                <div class="dropdown-footer">
+                    <a href="notifications.php" class="btn btn-sm btn-link">Voir toutes les notifications</a>
+                </div>
+            </div>
+        </div>
         <span class="text-white me-3">
           <i class="fas fa-building me-1"></i><?= htmlspecialchars($client['company_name']) ?>
         </span>
