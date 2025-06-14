@@ -202,46 +202,8 @@ $today_shipments = $stmt->fetchAll();
                 <span class="text-white me-3 d-none d-sm-inline">
                     <i class="fas fa-id-badge me-1"></i> <?= htmlspecialchars($agent['badge_number']) ?>
                 </span>
-                <!-- Notification Dropdown -->
-                <div class="dropdown me-3">
-                    <button class="btn btn-outline-light dropdown-toggle position-relative" 
-                            type="button" 
-                            id="notificationDropdown" 
-                            data-bs-toggle="dropdown" 
-                            aria-expanded="false">
-                        <i class="fas fa-bell"></i>
-                        <?php if ($draftNotificationCount > 0): ?>
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <?= $draftNotificationCount ?>
-                            </span>
-                        <?php endif; ?>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown">
-                        <?php if ($draftNotificationCount > 0): ?>
-                            <li><h6 class="dropdown-header">Contrats en brouillon</h6></li>
-                            <?php foreach ($draftNotifications as $notification): 
-                                $metadata = json_decode($notification['metadata'], true);
-                                $contract_id = $metadata['contract_id'] ?? 0;
-                            ?>
-                                <li>
-                                    <a class="dropdown-item" href="complete_contract.php?id=<?= $contract_id ?>">
-                                        <div class="d-flex justify-content-between">
-                                            <span class="fw-bold"><?= htmlspecialchars($notification['title']) ?></span>
-                                            <small class="text-muted ms-2"><?= date('H:i', strtotime($notification['created_at'])) ?></small>
-                                        </div>
-                                        <small class="text-muted"><?= htmlspecialchars($notification['message']) ?></small>
-                                    </a>
-                                </li>
-                            <?php endforeach; ?>
-                            <li><hr class="dropdown-divider"></li>
-                        <?php else: ?>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle me-2 text-muted"></i>Aucun nouveau brouillon</a></li>
-                        <?php endif; ?>
-                        <li><a class="dropdown-item text-center small" href="agent-contracts.php?status=draft">
-                            Voir tous les brouillons
-                        </a></li>
-                    </ul>
-                </div>
+                <?php include 'includes/agent_notification_dropdown.php'; ?>
+                <?php include 'includes/notification_styles.php'; ?>
                 <div class="dropdown">
                     <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user-circle"></i>
